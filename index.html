@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="초등 1~2학년 강점 탐색과 생활·학습·독서 습관 자가점검">
+<title>숲속 나 찾기 1·2학년</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap">
+<style>
+[hidden]{display:none!important}
+/* 1·2학년용: 큰 글자, 얼굴 3개 보기, 읽어 주기. 결과는 강점 → 습관 → 약속 → 내 생각 순 */
+:root{
+  --bg:#EEF4F2; --surface:#FFFFFF; --ink:#1F3A33; --muted:#5B7069; --line:#D3E0DB;
+  --leaf:#3E8E5E; --sun:#D99A1E; --sky:#3A7CA5; --stream:#23908C; --star:#7563BE; --mount:#80684F;
+  --soft:#E3EEEA;
+  --display:"Jua","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --body:"Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12201C; --surface:#1A2C27; --ink:#E4EFEA; --muted:#9BB2A9; --line:#2B423A;
+  --leaf:#6BC08B; --sun:#F0BE55; --sky:#79B4D8; --stream:#5CC6C1; --star:#AB9CF0; --mount:#C4A887;
+  --soft:#203631; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12201C; --surface:#1A2C27; --ink:#E4EFEA; --muted:#9BB2A9; --line:#2B423A;
+  --leaf:#6BC08B; --sun:#F0BE55; --sky:#79B4D8; --stream:#5CC6C1; --star:#AB9CF0; --mount:#C4A887;
+  --soft:#203631; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.65;margin:0;word-break:keep-all;overflow-wrap:break-word}
+.wrap{max-width:720px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-right));padding-block:28px max(56px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0;line-height:1.3}
+h1{font-size:clamp(30px,7.5vw,44px)}
+h2{font-size:25px}
+h3{font-size:20px}
+p{margin:0}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.eyebrow{font-family:var(--display);color:var(--leaf);letter-spacing:.06em;font-size:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:14px}
+button{font-family:var(--display);font-size:18px;cursor:pointer;border-radius:16px;border:2px solid var(--line);background:var(--surface);color:var(--ink);padding:12px 18px;transition:transform .12s,border-color .12s,background .12s}
+@media (hover:hover){button:hover{border-color:var(--leaf)}}
+button,a,input,select,textarea{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.primary{background:var(--leaf);border-color:var(--leaf);color:var(--surface)}
+@media (hover:hover){.primary:hover{filter:brightness(1.07)}}
+.big{font-size:22px;padding:16px 28px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.chars{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.chip{display:flex;align-items:center;gap:8px;font-size:15px}
+.ico{width:38px;height:38px;flex:none;display:inline-block}
+.ico svg{width:100%;height:100%;display:block}
+.legend{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center;font-family:var(--display);font-size:16px}
+.legend span{display:flex;flex-direction:column;align-items:center;gap:4px}
+.legend .face{width:44px;height:44px}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--soft);border-radius:14px;padding:12px 14px}
+.toggle b{font-family:var(--display);font-weight:400;font-size:18px}
+.switch{position:relative;width:58px;height:34px;border-radius:99px;background:var(--line);border:0;padding:0;flex:none}
+.switch::after{content:"";position:absolute;top:4px;left:4px;width:26px;height:26px;border-radius:50%;background:var(--surface);transition:left .15s}
+.switch[aria-checked="true"]{background:var(--leaf)}
+.switch[aria-checked="true"]::after{left:28px}
+/* quiz */
+.progress{height:12px;background:var(--soft);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--leaf);border-radius:99px;transition:width .25s}
+.qmeta{display:flex;justify-content:space-between;gap:10px;font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums}
+.qhead{display:flex;gap:10px;align-items:flex-start}
+.qtext{font-family:var(--display);font-size:clamp(26px,6.6vw,34px);line-height:1.45;min-height:2.9em;text-wrap:balance;flex:1}
+.speak{flex:none;width:52px;height:52px;padding:0;display:grid;place-items:center;border-radius:50%}
+.speak svg{width:26px;height:26px}
+.speak.on{border-color:var(--leaf);background:var(--soft)}
+.qex{background:var(--soft);border-radius:14px;padding:10px 14px;font-size:18px;line-height:1.6}
+.qex b{font-family:var(--display);font-weight:400;color:var(--muted);font-size:15px}
+.answers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.answers button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 4px 14px;font-size:18px;line-height:1.3}
+.answers button .face{width:58px;height:58px}
+.answers button.sel{background:var(--soft);border-color:var(--leaf)}
+.answers button:active{transform:scale(.96)}
+.face svg{width:100%;height:100%;display:block}
+@media (max-width:520px){.chars{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:360px){.answers button{font-size:16px}.answers button .face{width:50px;height:50px}}
+@media (hover:none) and (pointer:coarse){.kbhint{display:none}}
+.inapp{background:var(--soft);border:1.5px solid var(--sun);border-radius:14px;padding:12px 14px;font-size:15px;display:flex;flex-direction:column;gap:8px}
+/* results */
+.hero{display:flex;flex-direction:column;gap:16px}
+.toptwo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:520px){.toptwo{grid-template-columns:1fr}}
+.top{border-radius:20px;padding:18px;border:2px solid var(--c);background:var(--surface);display:flex;flex-direction:column;gap:8px;color:var(--ink)}
+.top .ico{width:58px;height:58px;color:var(--c)}
+.top h3{color:var(--c)}
+.top .tip{background:var(--soft);border-radius:12px;padding:10px 12px;font-size:16px}
+.leaves{display:flex;flex-direction:column;gap:10px}
+.lrow{display:grid;grid-template-columns:104px minmax(0,1fr);gap:10px;align-items:center;font-size:16px}
+.lrow .name{display:flex;align-items:center;gap:6px;font-family:var(--display)}
+.lrow .name .ico{width:26px;height:26px;color:var(--c)}
+.lrow .dots{display:flex;gap:6px}
+.lrow .dots i{width:20px;height:20px;border-radius:50% 0 50% 0;background:var(--soft);border:1.5px solid var(--c)}
+.lrow .dots i.on{background:var(--c)}
+.habits{display:flex;flex-direction:column;gap:14px}
+.habit{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:14px}
+.habit:first-child{border-top:0;padding-top:0}
+.hhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.pill{font-family:var(--display);font-size:15px;padding:3px 12px;border-radius:99px;border:1.5px solid currentColor}
+.lv3{color:var(--leaf)} .lv2{color:var(--sun)} .lv1{color:var(--sky)}
+.kv{display:grid;grid-template-columns:104px minmax(0,1fr);gap:4px 12px;font-size:16px;margin:0}
+.kv dt{font-family:var(--display);color:var(--muted)}
+.kv dd{margin:0}
+.promise{display:flex;flex-direction:column;gap:8px}
+.promise button{text-align:left;font-family:var(--body);font-size:17px;display:flex;gap:10px;align-items:center}
+.promise button .box{width:24px;height:24px;border-radius:6px;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-size:16px;line-height:1}
+.promise button.sel{border-color:var(--leaf);background:var(--soft)}
+.promise button.sel .box{border-color:var(--leaf);background:var(--leaf);color:var(--surface)}
+.plist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+textarea.open{font-family:var(--body);font-size:18px;width:100%;min-height:90px;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--ink);resize:vertical;line-height:1.6}
+.oq{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:16px}
+.oq:first-of-type{border-top:0;padding-top:0}
+.oq label{font-family:var(--display);font-size:21px;line-height:1.45}
+.oans{display:flex;flex-direction:column;gap:12px}
+.oans h3{font-size:18px}
+.oans p{white-space:pre-wrap;background:var(--soft);border-radius:12px;padding:10px 14px}
+.whof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.whof label{display:flex;flex-direction:column;gap:4px;font-family:var(--display);font-size:16px;color:var(--muted)}
+.whof .nmf{grid-column:1/-1}
+.whof input,.whof select{font-family:var(--body);font-size:18px;width:100%;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--ink)}
+details{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 22px}
+summary{font-family:var(--display);font-size:18px;cursor:pointer}
+details ul{padding-left:20px;margin:10px 0 0;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.note{font-size:13px;color:var(--muted);text-align:center}
+.toast{font-size:15px;color:var(--leaf)}
+.tlab{font-family:var(--display);font-size:15px;color:var(--muted);display:block}
+.otitle{font-family:var(--body);font-size:17px;width:100%;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--ink)}
+.btitle{font-family:var(--display);font-size:18px}
+.oans p.btitle{background:none;padding:0 0 2px}
+.print-only{display:none}
+.phead{border-bottom:2px solid var(--ink);padding-bottom:8px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;font-size:11pt}
+.phead .who span{display:inline-block;min-width:3.2em;border-bottom:1px solid var(--ink);margin:0 4px;text-align:center}
+.phead .who span.nm{min-width:7em}
+.pbox{border:1px dashed var(--line);border-radius:10px;min-height:3.2cm}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{
+  :root:not([data-theme="none"]){--bg:#fff;--surface:#fff;--ink:#1F3A33;--muted:#4F625C;--line:#B9C9C3;--leaf:#3E8E5E;--sun:#C1860F;--sky:#3A7CA5;--stream:#23908C;--star:#7563BE;--mount:#80684F;--soft:#EEF4F1;color-scheme:light}
+  @page{size:A4;margin:12mm}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;font-size:11.5pt;line-height:1.55}
+  .wrap{max-width:none;padding:0;gap:10px}
+  h1{font-size:22pt} h2{font-size:15pt} h3{font-size:13pt}
+  .panel,.top{padding:12px 14px;border-radius:10px}
+  .panel,.habits,.oans,.leaves{display:block}
+  .panel>*+*,.habits>*+*,.oans>*+*,.leaves>*+*{margin-top:9px}
+  .habit{display:block}
+  .habit>*+*{margin-top:6px}
+  .top,.habit,.leaves,.oans>div,.plist{break-inside:avoid}
+  h2,.hhead{break-after:avoid}
+  .no-print,button,details,.toast,#fallback{display:none!important}
+  .print-only{display:block!important}
+  .phead.print-only{display:flex!important}
+  .toptwo{grid-template-columns:1fr 1fr!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+(function(){
+const ICONS={
+ tree:'<svg viewBox="0 0 48 48" fill="none"><rect x="21" y="28" width="6" height="14" rx="2" fill="currentColor" opacity=".7"/><circle cx="24" cy="20" r="13" fill="currentColor"/></svg>',
+ sun:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="24" cy="24" r="9" fill="currentColor" stroke="none"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M9.9 38.1l4.2-4.2M33.9 14.1l4.2-4.2"/></svg>',
+ wind:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M6 17h24a6 6 0 1 0-6-6"/><path d="M6 26h32a5 5 0 1 1-5 5"/><path d="M6 35h16"/></svg>',
+ stream:'<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M4 16c5-5 10 5 15 0s10 5 15 0 7-1 10 1"/><path d="M4 26c5-5 10 5 15 0s10 5 15 0 7-1 10 1"/><path d="M4 36c5-5 10 5 15 0s10 5 15 0 7-1 10 1"/></svg>',
+ star:'<svg viewBox="0 0 48 48"><path fill="currentColor" d="M24 4l5.9 12.7 13.9 1.6-10.3 9.4 2.8 13.7L24 34.5l-12.3 6.9 2.8-13.7L4.2 18.3l13.9-1.6z"/></svg>',
+ mount:'<svg viewBox="0 0 48 48"><path fill="currentColor" opacity=".55" d="M28 14l16 28H18z"/><path fill="currentColor" d="M17 8l17 34H0z"/></svg>'
+};
+const SPEAKER='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+// 얼굴: 1 무표정(부정적 표정은 쓰지 않음), 2 살짝 웃음, 3 활짝 웃음
+const FACE=c=>m=>`<svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="${c}" opacity=".18"/><circle cx="24" cy="24" r="21" fill="none" stroke="${c}" stroke-width="3"/><circle cx="17" cy="20" r="2.6" fill="${c}"/><circle cx="31" cy="20" r="2.6" fill="${c}"/>${m}</svg>`;
+const FACES={
+ 1:FACE('var(--sky)')('<path d="M16 31h16" stroke="var(--sky)" stroke-width="3" stroke-linecap="round"/>'),
+ 2:FACE('var(--sun)')('<path d="M16 29q8 5 16 0" fill="none" stroke="var(--sun)" stroke-width="3" stroke-linecap="round"/>'),
+ 3:FACE('var(--leaf)')('<path d="M14 27q10 11 20 0z" fill="var(--leaf)" stroke="var(--leaf)" stroke-width="2.5" stroke-linejoin="round"/>')
+};
+const SCALE=[[1,'아니에요'],[2,'가끔 그래요'],[3,'자주 그래요']];
+const CH={
+ tree:{name:'나무',trait:'끝까지 해내기',c:'var(--leaf)',desc:'맡은 일을 끝까지 해내는 힘이 있어요.',grow:'할 일 하나를 끝까지 해 보고, 해낸 날은 달력에 나뭇잎을 그려요.'},
+ sun:{name:'햇살',trait:'마음 살피기',c:'var(--sun)',desc:'친구의 마음을 먼저 살펴 주는 힘이 있어요.',grow:'하루에 한 번 "고마워", "괜찮아?" 하고 먼저 말해요.'},
+ wind:{name:'바람',trait:'궁금해하기',c:'var(--sky)',desc:'궁금한 것을 알아보고 새로운 것에 도전하는 힘이 있어요.',grow:'궁금한 것 하나를 어른께 물어보거나 책에서 찾아봐요.'},
+ stream:{name:'시냇물',trait:'함께하기',c:'var(--stream)',desc:'친구와 이야기하고 함께 힘을 모으는 힘이 있어요.',grow:'친구가 말할 때 끝까지 듣고 "그렇구나" 하고 말해요.'},
+ star:{name:'별',trait:'상상하기',c:'var(--star)',desc:'나만의 생각을 떠올리고 표현하는 힘이 있어요.',grow:'오늘 있었던 일을 그림 한 장으로 그려 봐요.'},
+ mount:{name:'산',trait:'마음 다스리기',c:'var(--mount)',desc:'마음을 다스리고 할 일을 먼저 하는 힘이 있어요.',grow:'화가 나면 숨을 세 번 쉬고, 할 일을 먼저 해요.'}
+};
+const ORDER=['tree','sun','wind','stream','star','mount'];
+const AREAS={
+ life:{name:'생활 습관',sub:'잠·정리·스마트폰'},
+ study:{name:'학습 습관',sub:'듣기·준비물·숙제'},
+ read:{name:'독서 습관',sub:'책 읽기·끝까지·이야기하기'}
+};
+// [영역, 질문, 상황 예시, 작은 도전]
+const Q=[
+ ['tree','어려운 일도 끝까지 해요.','종이접기나 만들기가 잘 안 될 때'],
+ ['sun','친구가 속상해 보이면 "괜찮아?" 하고 물어봐요.','친구가 넘어졌을 때, 혼자 있을 때'],
+ ['wind','궁금한 것이 생기면 물어봐요.','"왜 그래요?" 하고 선생님이나 어른께'],
+ ['stream','친구 말을 끝까지 들어요.','친구가 신나게 이야기할 때'],
+ ['star','나만의 생각으로 그림을 그리거나 만들어요.','자유롭게 그리기, 만들기 시간'],
+ ['mount','화가 나면 숨을 쉬고 마음을 가라앉혀요.','친구가 내 것을 가져갔을 때, 놀이에서 졌을 때'],
+ ['tree','내가 맡은 일을 잊지 않고 해요.','우유 당번, 칠판 지우기 같은 1인 1역'],
+ ['sun','고마운 일이 있으면 "고마워" 하고 말해요.','친구가 연필을 빌려줬을 때'],
+ ['wind','처음 하는 놀이도 해 봐요.','새로운 놀이나 운동을 할 때'],
+ ['stream','친구와 함께 할 때 차례를 지키고 나눠 써요.','블록 놀이, 모둠 그림 그리기'],
+ ['star','재미있는 이야기나 놀이를 지어내요.','친구와 놀 때, 역할 놀이를 할 때'],
+ ['mount','놀고 싶어도 할 일을 먼저 해요.','숙제가 있는데 놀고 싶을 때'],
+ ['life','잘 시간이 되면 잠자리에 들어요.','보던 영상이 재미있을 때도','잘 시간을 정하고 지켜 보기'],
+ ['life','쓴 물건을 제자리에 정리해요.','놀이가 끝났을 때, 다 쓴 색연필','놀고 나면 장난감을 제자리에 두기'],
+ ['life','스마트폰이나 게임을 그만할 시간이 되면 스스로 꺼요.','거의 하지 않는다면 "자주 그래요"를 눌러요','어른과 시간을 정하고 타이머 맞추기'],
+ ['study','선생님 말씀을 잘 들어요.','선생님이 설명하실 때','선생님이 말씀하실 때 선생님 바라보기'],
+ ['study','책가방과 준비물을 스스로 챙겨요.','알림장을 보고 내일 가져갈 것을','자기 전에 알림장 보고 책가방 싸기'],
+ ['study','숙제를 스스로 해요.','누가 하라고 말하기 전에','집에 오면 숙제부터 하기'],
+ ['read','스스로 책을 꺼내 읽어요.','쉬는 시간이나 집에서 (어른과 함께 읽어도 좋아요)','하루에 그림책 한 권 읽기'],
+ ['read','책을 끝까지 읽어요.','그림책 한 권을 마지막 쪽까지','짧은 그림책부터 끝까지 읽기'],
+ ['read','책을 읽고 재미있었던 것을 이야기해요.','가족이나 친구, 선생님에게','재미있었던 장면 하나 말해 보기']
+];
+const OPEN=[
+ {q:'내가 잘하는 것을 써 보세요.',ex:'줄넘기, 그림 그리기, 친구 도와주기'},
+ {q:'선생님께 하고 싶은 말을 써 보세요.',ex:'○○이 어려워요, ○○을 도와주세요, 고마워요'},
+ {q:'가장 재미있게 읽은 책의 제목과 재미있었던 까닭을 써 보세요.',ex:'"그림이 예뻐서", "동물이 나와서 좋아요" (어른이 읽어 준 책도 좋아요. 제목이 생각나지 않으면 어떤 이야기였는지 써도 돼요)',book:true,why:'재미있었던 까닭'}
+];
+const OMAX=100;
+const LV={3:'🌳 튼튼해요',2:'🌿 자라고 있어요',1:'🌱 새싹이에요'};
+
+const state={step:'intro',i:0,ans:new Array(Q.length).fill(0),promise:null,open:OPEN.map(()=>''),title:OPEN.map(()=>''),who:{g:'',c:'',n:'',name:''},tts:false};
+const app=document.getElementById('app');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ico=k=>`<span class="ico" aria-hidden="true">${ICONS[k]}</span>`;
+
+/* 읽어 주기 */
+const TTS=('speechSynthesis' in window)&&typeof SpeechSynthesisUtterance!=='undefined';
+function koVoice(){try{return speechSynthesis.getVoices().find(v=>/^ko/i.test(v.lang));}catch(e){return null;}}
+if(TTS){try{speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>{};}catch(e){}}
+function say(text){
+  if(!TTS) return;
+  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';const v=koVoice();if(v)u.voice=v;u.rate=0.9;speechSynthesis.speak(u);}catch(e){}
+}
+function hush(){if(TTS){try{speechSynthesis.cancel();}catch(e){}}}
+const plain=s=>s.replace(/[○"]/g,'');
+
+/* 앱 안 브라우저 */
+const UA=navigator.userAgent||'';
+const INAPP=/KAKAOTALK|NAVER\(inapp|Instagram|FBAN|FBAV|FB_IAB|Line\/|BAND\/|DaumApps|everytimeApp|; wv\)/i.test(UA);
+const IS_ANDROID=/Android/i.test(UA);
+function inappBox(){
+  if(!INAPP) return '';
+  const web=/^https?:/.test(location.protocol);
+  const kakao=/KAKAOTALK/i.test(UA);
+  return `<div class="inapp" role="note"><b>앱 안에서 열려 있어요</b><span>카카오톡·네이버 같은 앱 안에서는 결과지 인쇄·PDF 저장이 안 될 수 있어요. ${IS_ANDROID?'오른쪽 위 메뉴(⋮)':'오른쪽 아래 메뉴나 공유 버튼'}에서 "다른 브라우저로 열기"를 눌러 ${IS_ANDROID?'크롬이나 삼성 인터넷':'사파리'}으로 열어 주세요.</span>${web&&(kakao||IS_ANDROID)?'<div class="row"><button id="extopen">다른 브라우저로 열기</button></div>':''}</div>`;
+}
+function bindInapp(){
+  const b=document.getElementById('extopen'); if(!b) return;
+  b.onclick=()=>{
+    const u=location.href;
+    if(/KAKAOTALK/i.test(UA)) location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(u);
+    else location.href='intent://'+u.replace(/^https?:\/\//,'')+'#Intent;scheme='+location.protocol.replace(':','')+';package=com.android.chrome;end';
+  };
+}
+
+/* 휴대폰 뒤로가기: 페이지를 떠나지 않고 이전 단계로 */
+function trap(){try{history.pushState({forest:1},'');}catch(e){}}
+window.addEventListener('popstate',()=>{
+  if(state.step==='intro') return;
+  if(state.step==='quiz'){ if(state.i>0) state.i--; else state.step='intro'; }
+  else if(state.step==='write'){ state.step='quiz'; state.i=Q.length-1; }
+  else if(state.step==='result'){ state.step='write'; }
+  render(); window.scrollTo(0,0);
+  if(state.step!=='intro') trap();
+});
+let lastTap=0;
+
+function score(ans){
+  const s={};ORDER.forEach(k=>s[k]=0);
+  const items={life:[],study:[],read:[]};
+  Q.forEach((q,i)=>{if(CH[q[0]]) s[q[0]]+=ans[i]; else items[q[0]].push({text:q[1],tip:q[3],v:ans[i]});});
+  const ranked=ORDER.map((k,idx)=>({k,v:s[k],idx})).sort((a,b)=>b.v-a.v||a.idx-b.idx);
+  const top=ranked.slice(0,2);
+  const alsoTied=ranked.slice(2).filter(r=>r.v===top[1].v).map(r=>r.k);
+  const habits={};
+  Object.keys(items).forEach(a=>{
+    const arr=items[a];const avg=arr.reduce((t,x)=>t+x.v,0)/arr.length;
+    let best=arr[0];arr.forEach(x=>{if(x.v>best.v)best=x;});
+    if(best.v<3)best=null;
+    let low=null;arr.forEach(x=>{if(x===best)return;if(!low||x.v<low.v)low=x;});
+    if(low&&low.v>2)low=null;
+    habits[a]={avg,best,low,level:avg>=2.5?3:avg>=1.75?2:1,first:arr[0]};
+  });
+  return {s,ranked,top,alsoTied,habits};
+}
+// 약속 후보: 영역마다 "해 볼 일"(없으면 그 영역에서 가장 낮은 문항의 제안)
+function promiseOptions(r){
+  return Object.keys(AREAS).map(a=>{const h=r.habits[a];return (h.low||h.first).tip;});
+}
+
+function render(){
+  if(state.step!=='quiz') hush();
+  if(state.step==='intro') return intro();
+  if(state.step==='quiz') return quiz();
+  if(state.step==='write') return write();
+  return result();
+}
+
+function intro(){
+  app.innerHTML=`
+  <div class="hero">
+    <p class="eyebrow">초등 1·2학년 · 21문항 · 약 10분</p>
+    <h1>숲속 나 찾기</h1>
+    <p>숲에는 나무, 햇살, 바람, 시냇물, 별, 산 친구가 살아요. 질문에 답하면 나를 닮은 숲 친구를 찾아 줄게요.</p>
+  </div>
+  <div class="panel">
+    <h3>숲의 여섯 친구</h3>
+    <div class="chars">${ORDER.map(k=>`<div class="chip"><span class="ico" style="color:${CH[k].c}" aria-hidden="true">${ICONS[k]}</span><span><b>${CH[k].name}</b><br><span class="muted small">${CH[k].trait}</span></span></div>`).join('')}</div>
+  </div>
+  ${inappBox()}
+  <div class="panel">
+    <h3>이렇게 해요</h3>
+    <p>질문을 읽고, 나와 비슷한 얼굴을 눌러요. 정답은 없어요.</p>
+    <div class="legend">${SCALE.map(([v,l])=>`<span><span class="face">${FACES[v]}</span>${l}</span>`).join('')}</div>
+    ${TTS?`<div class="toggle"><span><b>질문 읽어 주기</b><br><span class="muted small">질문이 나올 때마다 소리로 들려줘요</span></span><button type="button" class="switch" id="ttsw" role="switch" aria-checked="${state.tts}" aria-label="질문 읽어 주기"></button></div>`:''}
+  </div>
+  <div class="panel">
+    <h3>내 이름 쓰기</h3>
+    <p class="muted small">어려우면 선생님이나 어른이 도와줘도 돼요. 비워 두어도 괜찮아요.</p>
+    <form id="whoform" class="whof" autocomplete="off">
+      <label>학년<select id="wg"><option value="">선택</option>${[1,2].map(g=>`<option value="${g}" ${state.who.g==g?'selected':''}>${g}학년</option>`).join('')}</select></label>
+      <label>반<input id="wc" type="text" inputmode="numeric" maxlength="2" placeholder="예) 2" value="${esc(state.who.c)}"></label>
+      <label>번호<input id="wn" type="text" inputmode="numeric" maxlength="2" placeholder="예) 15" value="${esc(state.who.n)}"></label>
+      <label class="nmf">이름<input id="wname" type="text" maxlength="10" placeholder="이름" value="${esc(state.who.name)}"></label>
+    </form>
+    <p class="muted small">이름과 답은 어디에도 보내거나 저장하지 않아요. 창을 닫으면 사라져요.</p>
+    <div class="row"><button class="primary big" id="go">시작해요</button></div>
+  </div>
+  <p class="note">학생 자기성찰용 자체 제작 도구이며, 표준화된 심리검사나 진단 도구가 아닙니다.</p>`;
+  const W={wg:'g',wc:'c',wn:'n',wname:'name'};
+  Object.keys(W).forEach(id=>{const el=document.getElementById(id);el.oninput=el.onchange=()=>{let v=el.value;if(id==='wc'||id==='wn'){v=v.replace(/[^0-9]/g,'');el.value=v;}state.who[W[id]]=id==='wname'?v:v.trim();};});
+  const sw=document.getElementById('ttsw');
+  if(sw) sw.onclick=()=>{state.tts=!state.tts;sw.setAttribute('aria-checked',state.tts);if(state.tts)say('질문을 읽어 줄게요.');else hush();};
+  const start=()=>{state.who.name=state.who.name.trim();state.step='quiz';state.i=0;trap();render();window.scrollTo(0,0);};
+  bindInapp();
+  document.getElementById('whoform').onsubmit=e=>{e.preventDefault();start();};
+  ['wc','wn','wname'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();start();}}));
+  document.getElementById('go').onclick=start;
+}
+
+function readQ(i){const q=Q[i];say(plain(q[1])+' 예를 들면, '+plain(q[2]));}
+
+function quiz(){
+  const i=state.i,q=Q[i],k=q[0];
+  const color=CH[k]?'var(--leaf)':'var(--sky)';
+  const pct=Math.round(i/Q.length*100);
+  app.innerHTML=`
+  <div class="panel">
+    <div class="qmeta"><span>${CH[k]?'나의 힘':AREAS[k].name}</span><span>${i+1} / ${Q.length}</span></div>
+    <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="${Q.length}" aria-valuenow="${i}"><i style="width:${pct}%;background:${color}"></i></div>
+    <div class="qhead">
+      <p class="qtext" id="qt">${esc(q[1])}</p>
+      ${TTS?`<button class="speak${state.tts?' on':''}" id="spk" aria-label="질문 듣기">${SPEAKER}</button>`:''}
+    </div>
+    <p class="qex" id="qx"><b>이럴 때 생각해 봐요</b><br>${esc(q[2])}</p>
+    <div class="answers" role="group" aria-labelledby="qt" aria-describedby="qx">
+      ${SCALE.map(([v,l])=>`<button data-v="${v}" id="a${v}" class="${state.ans[i]===v?'sel':''}"><span class="face">${FACES[v]}</span>${l}</button>`).join('')}
+    </div>
+    <div class="row" style="justify-content:space-between">
+      <button id="back" ${i===0?'disabled style="opacity:.4"':''}>이전 질문</button>
+      <span class="muted small kbhint">키보드 1~3으로도 고를 수 있어요</span>
+    </div>
+  </div>`;
+  app.querySelectorAll('.answers button').forEach(b=>b.onclick=()=>{const t=Date.now();if(t-lastTap<350)return;lastTap=t;pick(+b.dataset.v);});
+  document.getElementById('back').onclick=()=>{if(state.i>0){state.i--;render();window.scrollTo(0,0);}};
+  const spk=document.getElementById('spk'); if(spk) spk.onclick=()=>readQ(state.i);
+  if(state.tts) readQ(i);
+}
+function pick(v){
+  state.ans[state.i]=v;
+  if(state.i<Q.length-1){state.i++;render();window.scrollTo(0,0);}
+  else{state.step='write';render();window.scrollTo(0,0);}
+}
+document.addEventListener('keydown',e=>{
+  if(state.step!=='quiz')return;
+  if(['1','2','3'].includes(e.key))pick(+e.key);
+  if(e.key==='Backspace'&&state.i>0){state.i--;render();}
+});
+
+function write(){
+  app.innerHTML=`
+  <div class="panel">
+    <div class="qmeta"><span>내 생각 쓰기</span><span>마지막이에요</span></div>
+    <div class="progress"><i style="width:100%"></i></div>
+    <h2>내 생각을 써 보세요</h2>
+    <p class="muted">쓰기 어려우면 비워 두어도 돼요. 결과지에 직접 쓰거나 그림으로 그려도 좋아요.</p>
+    ${OPEN.map((o,j)=>`
+    <div class="oq">
+      <div class="qhead"><label for="o${j}" style="flex:1">${j+1}. ${esc(o.q)}</label>${TTS?`<button class="speak" data-say="${j}" aria-label="질문 듣기">${SPEAKER}</button>`:''}</div>
+      <p class="qex"><b>이렇게 써도 돼요</b><br>${esc(o.ex)}</p>
+      ${titleField(j)}
+      <textarea class="open" id="o${j}" maxlength="${OMAX}" placeholder="${o.book?'재미있었던 까닭을 써요':'여기에 써요'}">${esc(state.open[j])}</textarea>
+    </div>`).join('')}
+    <div class="row" style="justify-content:space-between">
+      <button id="wback">질문으로 돌아가기</button>
+      <button class="primary big" id="wdone">결과 보기</button>
+    </div>
+  </div>`;
+  OPEN.forEach((o,j)=>{const ta=document.getElementById('o'+j);ta.oninput=()=>{state.open[j]=ta.value;};});
+  OPEN.forEach((o,j)=>{const ti=document.getElementById('t'+j);if(ti)ti.oninput=()=>{state.title[j]=ti.value;};});
+  app.querySelectorAll('[data-say]').forEach(b=>b.onclick=()=>{const o=OPEN[+b.dataset.say];say(plain(o.q)+' 예를 들면, '+plain(o.ex));});
+  document.getElementById('wback').onclick=()=>{state.step='quiz';state.i=Q.length-1;render();};
+  document.getElementById('wdone').onclick=()=>{state.step='result';render();window.scrollTo(0,0);};
+}
+function titleField(j){const o=OPEN[j];if(!o.book)return '';return `<span class="tlab">책 제목</span><input type="text" class="otitle" id="t${j}" maxlength="40" placeholder="책 제목" aria-label="책 제목" value="${esc(state.title[j])}"><span class="tlab">${o.why}</span>`;}
+function bookTitle(j){const t=state.title[j].trim();return `<p class="btitle"><span class="tlab">책 제목</span>${t?esc(t):'<span class="muted no-print">쓰지 않았어요</span>'}</p>${t?'':'<div class="print-only pline" style="min-height:2em;border-bottom:1px solid var(--line)"></div>'}<span class="tlab">${OPEN[j].why}</span>`;}
+function today(){const d=new Date();return d.getFullYear()+'. '+(d.getMonth()+1)+'. '+d.getDate()+'.';}
+function nameJosa(w){const c=w.charCodeAt(w.length-1)-0xAC00;return (c>=0&&c<11172&&c%28)?'이는':'는';}
+
+function result(){
+  const r=score(state.ans);
+  const t=r.top.map(x=>x.k);
+  const opts=promiseOptions(r);
+  if(state.promise!==null&&!opts.includes(state.promise)) state.promise=null;
+  const who=state.who.name;
+  app.innerHTML=`
+  <div class="hero">
+    <div class="phead print-only"><b>숲속 나 찾기 결과지 (1·2학년)</b><span class="who"><span>${esc(state.who.g)}</span>학년<span>${esc(state.who.c)}</span>반<span>${esc(state.who.n)}</span>번 이름<span class="nm">${esc(who)}</span></span><span>${today()}</span></div>
+    <p class="eyebrow">${who?esc(who)+'의 숲 결과':'나의 숲 결과'}</p>
+    <h1>${who?esc(who)+nameJosa(who):'나는'} ${CH[t[0]].name} 친구를 닮았어요!</h1>
+  </div>
+  <div class="toptwo">${t.map((k,n)=>`
+    <div class="top" style="--c:${CH[k].c}">
+      ${ico(k)}
+      <h3>${n===0?'':'그리고 '}${CH[k].name} · ${CH[k].trait}</h3>
+      <p>${CH[k].desc}</p>
+      <p class="tip"><b>이렇게 해 봐요</b><br>${CH[k].grow}</p>
+    </div>`).join('')}</div>
+  ${r.alsoTied.length?`<p class="muted small">${r.alsoTied.map(k=>CH[k].name).join(', ')}의 힘도 똑같이 많이 나왔어요.</p>`:''}
+
+  <div class="panel">
+    <h2>내 안의 숲</h2>
+    <p class="muted small">나뭇잎이 많을수록 자주 쓰는 힘이에요. 나뭇잎이 적은 힘은 앞으로 키워 갈 힘이에요.</p>
+    <div class="leaves">${ORDER.map(k=>`
+      <div class="lrow" style="--c:${CH[k].c}" aria-label="${CH[k].name} 나뭇잎 ${r.s[k]-1}개">
+        <span class="name">${ico(k)}${CH[k].name}</span>
+        <span class="dots" aria-hidden="true">${[1,2,3,4,5].map(n=>`<i class="${n<=r.s[k]-1?'on':''}"></i>`).join('')}</span>
+      </div>`).join('')}</div>
+  </div>
+
+  <div class="panel">
+    <h2>나의 습관</h2>
+    <div class="habits">${Object.keys(AREAS).map(a=>{const h=r.habits[a];return `
+      <div class="habit">
+        <div class="hhead"><h3>${AREAS[a].name} <span class="muted small">${AREAS[a].sub}</span></h3><span class="pill lv${h.level}">${LV[h.level]}</span></div>
+        <dl class="kv">
+          <dt>${h.best?'잘하고 있어요':'지금은'}</dt><dd>${h.best?esc(h.best.text):'이제 시작이에요. 하나씩 해 봐요!'}</dd>
+          <dt>해 볼까요?</dt><dd>${h.low?esc(h.low.tip):'지금처럼 계속해요!'}</dd>
+        </dl>
+      </div>`}).join('')}</div>
+  </div>
+
+  <div class="panel">
+    <h2>이번 주 나의 약속</h2>
+    <p class="muted no-print">하나를 골라 눌러 보세요.</p>
+    <div class="promise no-print">${opts.map((o,n)=>`<button data-p="${n}" class="${state.promise===o?'sel':''}" aria-pressed="${state.promise===o}"><span class="box" aria-hidden="true">${state.promise===o?'✓':''}</span>${esc(o)}</button>`).join('')}</div>
+    <ul class="plist print-only" id="plist">${opts.map(o=>`<li>${state.promise===o?'■':'□'} ${esc(o)}</li>`).join('')}</ul>
+  </div>
+
+  <div class="panel">
+    <div class="hhead"><h2>내 생각</h2><button id="rewrite" class="no-print">고쳐 쓰기</button></div>
+    <div class="oans">${OPEN.map((o,j)=>`<div><h3>${j+1}. ${esc(o.q)}</h3>${o.book?bookTitle(j):''}${state.open[j].trim()?`<p>${esc(state.open[j].trim())}</p>`:`<p class="muted no-print">쓰지 않았어요</p><div class="print-only pbox"></div>`}</div>`).join('')}</div>
+  </div>
+
+  <div class="panel no-print">
+    <div class="row">
+      <button class="primary" id="print">결과지 인쇄·PDF 저장</button>
+      <button id="copy">결과 글로 복사하기</button>
+      <button id="again">처음부터 다시 하기</button>
+      <span class="toast" id="toast" role="status"></span>
+    </div>
+    ${inappBox()}
+    <p class="muted small">PDF로 저장하려면 인쇄 창에서 프린터(대상)를 "PDF로 저장"으로 고르세요. 아이폰·아이패드는 인쇄 화면에서 공유 버튼을 눌러 "파일에 저장"을 고르면 PDF로 저장돼요.</p>
+    <textarea id="fallback" hidden readonly style="width:100%;min-height:160px;font-family:var(--body);font-size:14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px"></textarea>
+  </div>
+
+  <details class="no-print">
+    <summary>선생님·보호자용 해석 안내</summary>
+    <ul>
+      <li>이 도구는 자체 제작한 자기성찰 활동지입니다. 신뢰도·타당도를 검증한 표준화 검사가 아니므로 학생을 분류하거나 기록·평가 자료로 쓰지 마세요.</li>
+      <li>1·2학년용은 21문항입니다. 강점 6개 × 2문항, 생활·학습·독서 습관 × 3문항이며, 모든 문항을 "아니에요(1)·가끔 그래요(2)·자주 그래요(3)" 3단계로 묻습니다. "아니에요"에는 부정적인 표정 대신 무표정 얼굴을 씁니다.</li>
+      <li>강점 이름은 학생용으로 바꿔 표시합니다: 끝까지 해내기(끈기·책임), 마음 살피기(배려·친절), 궁금해하기(호기심·도전), 함께하기(협력·소통), 상상하기(창의·상상), 마음 다스리기(자기조절).</li>
+      <li>강점 점수는 2문항 합(2~6점)이며 결과 화면에는 나뭇잎 1~5개(점수−1)로 보여 줍니다. 동점이면 화면 순서(나무→산)대로 앞의 것을 보여 주고, 같은 점수의 다른 강점을 함께 안내합니다.</li>
+      <li>습관 단계는 3문항 평균으로 정합니다: 2.5 이상 "튼튼해요", 1.75 이상 "자라고 있어요", 그 아래 "새싹이에요". "잘하고 있어요"는 "자주 그래요"로 답한 문항에서, "해 볼까요?"는 "가끔·아니에요"로 답한 문항 중 가장 낮은 것(동점이면 앞 문항)에서 뽑으며 둘이 같은 문항이 되지 않게 합니다.</li>
+      <li>"이번 주 나의 약속"은 습관 영역마다 하나씩 나온 제안 중에서 고릅니다. 결과지에는 세 가지가 □로 인쇄되고 고른 것은 ■로 표시됩니다.</li>
+      <li>스마트폰·게임을 거의 하지 않는 학생은 "자주 그래요"를 누르도록 안내합니다.</li>
+      <li>"질문 읽어 주기"는 기기의 음성 기능을 씁니다. 기기에 한국어 음성이 없으면 소리가 나지 않거나 어색하게 읽을 수 있습니다. 1학년 1학기에는 선생님이나 보호자가 함께 읽어 주며 하는 것을 권합니다.</li>
+      <li>"내 생각 쓰기" 3문항은 선택 응답입니다. 3번은 가장 재미있게 읽은 책의 제목과 까닭을 따로 쓰게 하며, 결과지에도 제목과 까닭이 나뉘어 실립니다. 비워 두면 결과지에 손으로 쓰거나 그릴 수 있는 빈칸으로 인쇄됩니다.</li>
+      <li>대화 질문 예시: "이 힘을 썼던 때가 언제였어?", "약속을 지키려면 누가 도와주면 좋을까?"</li>
+      <li>모든 문항이 긍정 방향이라 무조건 높게 답하는 경향은 걸러지지 않습니다. 점수보다 학생과의 대화 소재로 활용해 주세요. 잠·스마트폰 문항에서 걱정되는 답이 반복되면 보호자 상담으로 이어 주세요.</li>
+      <li>개인정보: 학년·반·번호·이름과 답을 서버로 보내거나 브라우저에 저장하지 않습니다. 새로고침하거나 "처음부터 다시 하기"를 누르면 모두 지워집니다. 인쇄물에는 학생 개인정보가 담기므로 보관과 폐기에 유의해 주세요.</li>
+    </ul>
+  </details>
+  <p class="note">숲속 나 찾기 1·2학년 · 학생 자기성찰용 자체 제작 도구</p>`;
+
+  app.querySelectorAll('.promise button').forEach(b=>b.onclick=()=>{
+    const o=opts[+b.dataset.p];
+    state.promise=(state.promise===o)?null:o;
+    app.querySelectorAll('.promise button').forEach((x,n)=>{const on=opts[n]===state.promise;x.classList.toggle('sel',on);x.setAttribute('aria-pressed',on);x.querySelector('.box').textContent=on?'✓':'';});
+    document.getElementById('plist').innerHTML=opts.map(o=>`<li>${state.promise===o?'■':'□'} ${esc(o)}</li>`).join('');
+  });
+  bindInapp();
+  document.getElementById('print').onclick=()=>{if(INAPP)document.getElementById('toast').textContent='인쇄 창이 뜨지 않으면 다른 브라우저로 열어 주세요.';try{window.print();}catch(e){document.getElementById('toast').textContent='이 브라우저에서는 인쇄할 수 없어요. 크롬·엣지에서 열어 주세요.';}};
+  document.getElementById('rewrite').onclick=()=>{state.step='write';render();window.scrollTo(0,0);};
+  document.getElementById('again').onclick=()=>{state.step='intro';state.ans.fill(0);state.promise=null;state.open=OPEN.map(()=>'');state.title=OPEN.map(()=>'');state.who={g:'',c:'',n:'',name:''};render();window.scrollTo(0,0);};
+  document.getElementById('copy').onclick=()=>{
+    const txt=summaryText(r);
+    const toast=document.getElementById('toast');
+    const fb=()=>{const ta=document.getElementById('fallback');ta.value=txt;ta.hidden=false;ta.focus();ta.select();toast.textContent='아래 글을 길게 눌러 복사하세요';};
+    try{navigator.clipboard.writeText(txt).then(()=>{toast.textContent='복사했어요';},fb);}catch(e){fb();}
+  };
+}
+function summaryText(r){
+  const t=r.top.map(x=>x.k);
+  const wh=state.who;const whoTxt=[wh.g&&wh.g+'학년',wh.c&&wh.c+'반',wh.n&&wh.n+'번',wh.name].filter(Boolean).join(' ');
+  let s=`[숲속 나 찾기 1·2학년 결과]${whoTxt?' '+whoTxt:''}\n닮은 숲 친구: ${CH[t[0]].name}(${CH[t[0]].trait}), ${CH[t[1]].name}(${CH[t[1]].trait})\n강점 점수(2~6): ${ORDER.map(k=>CH[k].name+' '+r.s[k]).join(' / ')}\n`;
+  Object.keys(AREAS).forEach(a=>{const h=r.habits[a];s+=`${AREAS[a].name}: ${LV[h.level].replace(/^\S+\s/,'')}${h.low?' · 해 볼 일 - '+h.low.tip:''}\n`;});
+  if(state.promise) s+=`이번 주 약속: ${state.promise}\n`;
+  OPEN.forEach((o,j)=>{const ti=state.title[j].trim(),tx=state.open[j].trim();if(ti||tx)s+=`${j+1}. ${o.q}\n${o.book&&ti?'   책 제목: '+ti+'\n':''}${tx?'   '+tx.replace(/\n/g,'\n   ')+'\n':''}`;});
+  return s;
+}
+render();
+})();
+</script>
+</body>
+</html>
