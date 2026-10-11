@@ -135,6 +135,14 @@ details ul{padding-left:20px;margin:10px 0 0;display:flex;flex-direction:column;
 .phead .who span.nm{min-width:7em}
 .pbox{border:1px dashed var(--line);border-radius:10px;min-height:3.2cm}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.ntc{position:fixed;inset:0;background:rgba(12,28,23,.6);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));z-index:50}
+.ntcbox{background:var(--surface);color:var(--ink);border-radius:20px;max-width:520px;width:100%;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;-webkit-overflow-scrolling:touch;padding:22px;display:flex;flex-direction:column;gap:12px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.ntcbox ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.ntcbox .warn{background:var(--soft);border:1.5px solid var(--sun);border-radius:12px;padding:10px 12px;font-size:15px}
+.ntcbox .primary{align-self:stretch;font-size:19px;padding:14px;position:sticky;bottom:0;box-shadow:0 -14px 14px -2px var(--surface);flex:none}
+@media (max-height:740px){.ntcbox{padding:16px 18px;gap:8px;font-size:15px;line-height:1.55}.ntcbox h2{font-size:21px}.ntcbox ul{gap:5px}.ntcbox .warn{font-size:14px;padding:8px 10px}}
+.ntchead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+@media print{.ntc{display:none!important}}
 @media print{
   :root:not([data-theme="none"]){--bg:#fff;--surface:#fff;--ink:#1F3A33;--muted:#4F625C;--line:#B9C9C3;--leaf:#3E8E5E;--sun:#C1860F;--sky:#3A7CA5;--stream:#23908C;--star:#7563BE;--mount:#80684F;--soft:#EEF4F1;color-scheme:light}
   @page{size:A4;margin:12mm}
@@ -525,7 +533,35 @@ function summaryText(r){
   OPEN.forEach((o,j)=>{const ti=state.title[j].trim(),tx=state.open[j].trim();if(ti||tx)s+=`${j+1}. ${o.q}\n${o.book&&ti?'   책 제목: '+ti+'\n':''}${tx?'   '+tx.replace(/\n/g,'\n   ')+'\n':''}`;});
   return s;
 }
+// 접속 안내 팝업: 페이지를 열 때마다 한 번 보여 줌(저장하지 않음)
+function notice(){
+  const d=document.createElement('div');
+  d.className='ntc';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-labelledby','ntcT');
+  d.innerHTML=`<div class="ntcbox">
+    <div class="ntchead"><h2 id="ntcT">시작하기 전에 알아 두어요</h2>${TTS?`<button class="speak" id="ntcSay" aria-label="안내 듣기">${SPEAKER}</button>`:''}</div>
+    <ul>
+      <li><b>시험이 아니에요.</b> 정답도 없어요.</li>
+      <li>나와 비슷한 <b>얼굴</b>을 누르면 돼요.</li>
+      <li><b>10분</b>쯤 걸려요. 끝날 때까지 다른 곳으로 나가지 말아요.</li>
+      <li>이름과 답은 <b>저장되지 않아요.</b></li>
+      <li>어려우면 선생님이나 어른께 <b>도와 달라고</b> 해요.</li>
+    </ul>
+    ${INAPP?'<p class="warn"><b>지금 카카오톡 같은 앱 안에서 열려 있어요.</b> 결과지를 인쇄하거나 PDF로 저장하려면 '+(IS_ANDROID?'크롬이나 삼성 인터넷':'사파리')+'으로 다시 열어 주세요.</p>':''}
+    <p class="muted small">선생님·보호자께: 결과지는 마지막 화면에서 인쇄하거나 PDF로 저장할 수 있습니다. 학생 자기성찰용 자체 제작 도구이며, 표준화된 심리검사나 진단 도구가 아닙니다.</p>
+    <button class="primary" id="ntcOk">알겠어요</button>
+  </div>`;
+  document.body.appendChild(d);
+  const prev=document.body.style.overflow;document.body.style.overflow='hidden';
+  app.setAttribute('aria-hidden','true');
+  const ok=d.querySelector('#ntcOk');
+  const close=()=>{hush();d.remove();document.body.style.overflow=prev;app.removeAttribute('aria-hidden');const f=document.getElementById('wname');if(f&&matchMedia('(hover:hover)').matches)f.focus();};
+  ok.onclick=close;
+  d.addEventListener('keydown',e=>{if(e.key==='Escape')close();if(e.key==='Tab'){const fs=[...d.querySelectorAll('button')];const i=fs.indexOf(document.activeElement);if(e.shiftKey&&i<=0){e.preventDefault();fs[fs.length-1].focus();}else if(!e.shiftKey&&i===fs.length-1){e.preventDefault();fs[0].focus();}}});
+  const sb=d.querySelector('#ntcSay');if(sb)sb.onclick=()=>say('시작하기 전에 알아 두어요. 시험이 아니에요. 정답도 없어요. 나와 비슷한 얼굴을 누르면 돼요. 십 분쯤 걸려요. 끝날 때까지 다른 곳으로 나가지 말아요. 이름과 답은 저장되지 않아요. 어려우면 선생님이나 어른께 도와 달라고 해요.');
+  setTimeout(()=>ok.focus({preventScroll:true}),30);
+}
 render();
+notice();
 })();
 </script>
 </body>
